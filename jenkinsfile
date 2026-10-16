@@ -31,8 +31,10 @@ pipeline {
         stage('Docker Container Run') {
             steps {
                 sh '''
-                    docker run -d -p ${PORT}:{PORT}
-                    --name $CONTAINER_NAME $IMAGE_NAME
+                    p "${PORT}:${PORT}" \
+                    -e PORT="${PORT}" \
+                    --name "$CONTAINER_NAME" \
+                    "$IMAGE_NAME"
                 '''
             }
         }
@@ -40,7 +42,7 @@ pipeline {
             steps {
                 emailext(
                     subject: "NestJs App Deployed Successfully on EC2!",
-                    body: "Your Nest JS App is Deployed! http://http://13.205.18.45:${PORT}/",
+                    body: "Your Nest JS App is Deployed! http://13.205.18.45:${PORT}/",
                     to: "${EMAIL}"
                 )
             }
