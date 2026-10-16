@@ -29,15 +29,15 @@ pipeline {
                 }
         }
         stage('Docker Container Run') {
-            steps {
-                sh '''
-                    p "${PORT}:${PORT}" \
-                    -e PORT="${PORT}" \
-                    --name "$CONTAINER_NAME" \
-                    "$IMAGE_NAME"
-                '''
-            }
-        }
+    steps {
+        sh '''
+            docker run -d -p "${PORT}:${PORT}" \
+                -e PORT="${PORT}" \
+                --name "$CONTAINER_NAME" \
+                "$IMAGE_NAME"
+        '''
+    }
+}
         stage('Send Email Notification') {
             steps {
                 emailext(
